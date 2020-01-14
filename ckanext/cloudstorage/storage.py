@@ -22,6 +22,9 @@ ALLOWED_UPLOAD_TYPES = (cgi.FieldStorage, FlaskFileStorage)
 
 def _get_underlying_file(wrapper):
     if isinstance(wrapper, FlaskFileStorage):
+        # FIXME:80  Python 2.7 tempfile.SpooledTemporaryFile compatibility issue with libcloud v1.5
+        # Proposed Fix: Wait for python 3 compat with ckan and get this working with S3 uploads for now.
+        wrapper.stream.next = wrapper.stream.next()
         return wrapper.stream
     return wrapper.file
 
